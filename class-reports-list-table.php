@@ -96,8 +96,6 @@ class Reports_List_Table extends WP_List_Table {
        $list = array();
 	   foreach ( $item['widgets'] as $sidebar => $widgets ){
 		   if( !empty($widgets) && $sidebar != 'array_version' ){
-			   //FB::info( $sidebar, 'sidebar' );
-			   //FB::info( $widgets, 'widgets' );
 			   $widget_list = join($widgets, ", ");
 			   $list[] = "<li><strong>{$sidebar}</strong><ul><li>{$widget_list}</li></ul></li>";
 		   }
@@ -366,7 +364,6 @@ class Reports_List_Table extends WP_List_Table {
 					'plugins' => get_option('active_plugins', array() ),
 					'widgets' => get_option('sidebars_widgets', array() ),
 				);
-				//FB::info( get_option('sidebars_widgets', array() ) );
 				restore_current_blog();
 			}
 		}
