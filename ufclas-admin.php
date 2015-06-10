@@ -3,7 +3,7 @@
 Plugin Name: UF CLAS - Admin Tools
 Plugin URI: http://it.clas.ufl.edu/
 Description: Management Tools for UF CLAS.
-Version: 0.2.0
+Version: 0.2.1
 Author: Priscilla Chapman (CLAS IT)
 Author URI: http://it.clas.ufl.edu/
 License: GPL2
@@ -32,17 +32,18 @@ add_action('network_admin_menu', 'ufclas_admin_register_menu');
 function ufclas_admin_scripts( $hook ) {
 	// Site info page
 	if ( 'clas-admin_page_ufclas-admin-info' == $hook ) {
-        // Datatables scripts and styles
+        // Datatables, TableTools scripts and styles
 		wp_enqueue_style( 'datatables', '//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css', array(), '1.10.7', 'screen');
     	wp_enqueue_script( 'datatables', '//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js', array('jquery'), '1.10.7', true);
-		//wp_enqueue_style( 'datatables', plugins_url( '/lib/jquery.datatables/jquery.dataTables.min.css', __FILE__ ), array(), '1.10.7', 'screen');
-    	//wp_enqueue_script( 'datatables', plugins_url( '/lib/jquery.datatables/jquery.dataTables.min.js', __FILE__ ), array('jquery'), '1.10.7', true);
+		wp_enqueue_style( 'tabletools', '//cdn.datatables.net/tabletools/2.2.4/css/dataTables.tableTools.css', array('datatables'), '2.2.4', 'screen');
+    	wp_enqueue_script( 'tabletools', '//cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.min.js', array('jquery','datatables'), '2.2.4', true);
 		
 		// Plugin scripts and files
 		wp_enqueue_style( 'ufclas-admin', plugins_url( '/css/ufclas-admin.css' , __FILE__ ), array('datatables'), '', 'screen');
 		wp_enqueue_script( 'ufclas-admin', plugins_url( '/js/ufclas-admin.js' , __FILE__ ), array('datatables'), '', true);
 		wp_localize_script('ufclas-admin', 'ufca_data', array(
-			'site_info_nonce' => wp_create_nonce( "ufca-get-site-info")
+			'site_info_nonce' => wp_create_nonce( "ufca-get-site-info"),
+			'plugin_url' => plugins_url( '' , __FILE__ )
 		));
     }
 }
