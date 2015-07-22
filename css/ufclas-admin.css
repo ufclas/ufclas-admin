@@ -1,18 +1,18 @@
 /* CSS Document */
 
-#info-table {
+table.ufca-datatable {
 	display: none;
 	width: 100%;
 }
-#info-table th {
+table.ufca-datatable th {
 	text-align: left;	
 }
-#info-table th.id {
+table#info th.id {
 	max-width: 20px;	
 }
-#info-table th.path {
+table#info th.path {
 	max-width: 45px;	
 }
-#info-table th.plugins {
+table#info th.plugins {
 	max-width: 250px;	
 }

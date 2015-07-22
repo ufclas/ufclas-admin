@@ -1,12 +1,13 @@
 jQuery(function($){
-   	var data = {
-		'action': 'ufca_site_info',
-		'site_info_nonce': ufca_data.site_info_nonce
-	};
+   	// Create data object
+	var data = {};
+	data['action'] = ufca_data.action;
+	data[ufca_data.nonce_name] = ufca_data.nonce_value;
+	
 	// Use WordPress to fetch data
 	$.post(ajaxurl, data, function(response) {
 			// Display data in a customizable table
-			$('#info-table').DataTable({ 
+			$('.ufca-datatable').DataTable({ 
 				'data': JSON.parse(response),
 				'dom': 'T<"clear">lfrtip',
 				'tableTools': { 
@@ -14,6 +15,6 @@ jQuery(function($){
 					'aButtons': [ "copy", "csv", "print" ]
 				}
 			});
-			$('#info-table').fadeIn('fast');
+			$('.ufca-datatable').fadeIn('fast');
 	});
 });
