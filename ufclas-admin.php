@@ -3,7 +3,7 @@
 Plugin Name: UF CLAS - Admin Tools
 Plugin URI: http://it.clas.ufl.edu/
 Description: Management Tools for UF CLAS.
-Version: 0.3.0
+Version: 0.4.0
 Author: Priscilla Chapman (CLAS IT)
 Author URI: http://it.clas.ufl.edu/
 License: GPL2
@@ -12,14 +12,18 @@ License: GPL2
 // Include admin page functions
 require_once( dirname( __FILE__) . '/ufclas-admin-info.php' );
 require_once( dirname( __FILE__) . '/ufclas-admin-siteusers.php' );
-//require_once( dirname( __FILE__) . '/ufclas-admin-archive.php' );
+require_once( dirname( __FILE__) . '/ufclas-admin-siteforms.php' );
 
 // Add Menu iteme to network admin dashboard
 function ufclas_admin_register_menu(){
 	add_menu_page('CLAS Admin Tools', 'CLAS Admin', 'manage_network_options', 'ufclas-admin', 'ufclas_admin_page');
 	add_submenu_page('ufclas-admin','Site Info', 'Site Info', 'manage_network_options', 'ufclas-admin-info', 'ufclas_admin_info_page');
 	add_submenu_page('ufclas-admin','Site Users', 'Site Users', 'manage_network_options', 'ufclas-admin-siteusers', 'ufclas_admin_siteusers_page');
-	//add_submenu_page('ufclas-admin','Bulk Archive Sites', 'Bulk Archive', 'manage_network_options', 'ufclas-admin-archive', 'ufclas_admin_archive_page');
+	
+	// Only show if Gravity Forms is network activated
+	if( is_plugin_active_for_network('gravityforms/gravityforms.php') ){
+		add_submenu_page('ufclas-admin','Site Forms', 'Site Forms', 'manage_network_options', 'ufclas-admin-siteforms', 'ufclas_admin_siteforms_page');
+	}
 }
 add_action('network_admin_menu', 'ufclas_admin_register_menu');
 
@@ -27,7 +31,8 @@ function ufclas_admin_scripts( $hook ) {
 	// Site info page
 	$pages = array(
 		'clas-admin_page_ufclas-admin-info',
-		'clas-admin_page_ufclas-admin-siteusers'
+		'clas-admin_page_ufclas-admin-siteusers',
+		'clas-admin_page_ufclas-admin-siteforms'
 	);
 	if ( in_array( $hook, $pages) ) {
         // Datatables, TableTools scripts and styles

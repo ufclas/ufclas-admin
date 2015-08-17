@@ -11,7 +11,6 @@ function ufclas_admin_site_info_table() {
 	
 	// Get existing copy of transient data if exists 
 	// TODO: 
-	delete_site_transient('ufclas_admin_siteinfo_data');
 	//delete_site_transient('ufclas_admin_siteinfo');
 	if( false === ( $data = get_site_transient('ufclas_admin_siteinfo') ) ){
 		
