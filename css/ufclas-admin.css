@@ -7,6 +7,9 @@ table.ufca-datatable {
 table.ufca-datatable th {
 	text-align: left;	
 }
+table#info td {
+	vertical-align: top;	
+}
 table#info th.id {
 	max-width: 20px;	
 }
@@ -15,4 +18,23 @@ table#info th.path {
 }
 table#info th.plugins {
 	max-width: 250px;	
+}
+table#themeupgrade th.widgets,
+table#themeupgrade th.plugins {
+	width: 25% !important;	
+}
+table#info th.sitetitle {
+	width: 15% !important;	
+}
+table#info th.formid {
+	max-width: 50px;	
+}
+table#info th.formfields {
+	width: 40% !important;	
+}
+table#info th.formtitle {
+	width: 12% !important;	
+}
+table#info th.formnotifications {
+	width: 20% !important;	
 }

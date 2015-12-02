@@ -3,7 +3,7 @@
 Plugin Name: UF CLAS - Admin Tools
 Plugin URI: http://it.clas.ufl.edu/
 Description: Management Tools for UF CLAS.
-Version: 0.4.0
+Version: 0.5.0
 Author: Priscilla Chapman (CLAS IT)
 Author URI: http://it.clas.ufl.edu/
 License: GPL2
@@ -13,6 +13,7 @@ License: GPL2
 require_once( dirname( __FILE__) . '/ufclas-admin-info.php' );
 require_once( dirname( __FILE__) . '/ufclas-admin-siteusers.php' );
 require_once( dirname( __FILE__) . '/ufclas-admin-siteforms.php' );
+require_once( dirname( __FILE__) . '/ufclas-admin-themeupgrade.php' );
 
 // Add Menu iteme to network admin dashboard
 function ufclas_admin_register_menu(){
@@ -24,15 +25,22 @@ function ufclas_admin_register_menu(){
 	if( is_plugin_active_for_network('gravityforms/gravityforms.php') ){
 		add_submenu_page('ufclas-admin','Site Forms', 'Site Forms', 'manage_network_options', 'ufclas-admin-siteforms', 'ufclas_admin_siteforms_page');
 	}
+    
+    // Only show the theme upgrade page if theme is network activated
+	$themes = array_keys( wp_get_themes(array('allowed' => 'network')) );
+	if( in_array('ufclaspeople', $themes) ){
+    	add_submenu_page('ufclas-admin','Theme Upgrade', 'Theme Upgrade', 'manage_network_options', 'ufclas-admin-themeupgrade', 'ufclas_admin_themeupgrade_page');
+	}
 }
 add_action('network_admin_menu', 'ufclas_admin_register_menu');
 
 function ufclas_admin_scripts( $hook ) {
-	// Site info page
+	// Admin pages to add scripts
 	$pages = array(
 		'clas-admin_page_ufclas-admin-info',
 		'clas-admin_page_ufclas-admin-siteusers',
-		'clas-admin_page_ufclas-admin-siteforms'
+		'clas-admin_page_ufclas-admin-siteforms',
+		'clas-admin_page_ufclas-admin-themeupgrade',
 	);
 	if ( in_array( $hook, $pages) ) {
         // Datatables, TableTools scripts and styles
@@ -67,6 +75,7 @@ function ufclas_admin_page(){
 	<div class="wrap">
 		<div id="icon-tools" class="icon32"></div>
 		<h2><?php _e( 'CLAS Admin Tools', 'ufclas-admin' ); ?></h2>
+        <p>Choose a page from the menu.</p>
     </div>
 	<?php
 }

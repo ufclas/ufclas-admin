@@ -9,7 +9,7 @@ function ufclas_admin_siteforms_table() {
 	
 	// Get existing copy of transient data if exists 
 	// @todo option to clear transient
-	delete_site_transient('ufclas_admin_siteforms');
+	//delete_site_transient('ufclas_admin_siteforms');
 	if( false === ( $data = get_site_transient('ufclas_admin_siteforms') ) ){
 				
 		foreach($sites as $site){	
@@ -29,14 +29,11 @@ function ufclas_admin_siteforms_table() {
 					'No forms found',
 					'-',
 					'-',
-					'-',
 					'-'
 				);
 			} else { // Site has forms
 	
 			foreach($forms as $form){
-				//error_log( $site['id'] . 'FORMS: ' . print_r($forms, true) );
-				
 				// Get form field labels
 				$form_fields = array();
 				foreach($form['fields'] as $field){
@@ -62,7 +59,6 @@ function ufclas_admin_siteforms_table() {
 					$form['title'],
 					implode(', ', $form_fields ),
 					implode(' ', $form_notifications),
-					'',
 					$form_status,
 				);
 				
@@ -99,7 +95,6 @@ function ufclas_admin_siteforms_page(){
                     <th class="formtitle">Form Title</th>
                     <th class="formfields">Field Labels</th>
                     <th class="formnotifications">Notifications</th>
-                    <th class="formspage">Page</th>
                     <th class="formstatus">Status</th>
                 </tr>
             </thead>

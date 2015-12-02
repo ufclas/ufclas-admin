@@ -1,6 +1,6 @@
 .svn*
 _notes
-_notes/*.xml
 Thumbs.db
-.orig
-lib/*
+.sass-cache
+*.orig
+.DS_Store
