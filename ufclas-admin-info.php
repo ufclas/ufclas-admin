@@ -45,11 +45,11 @@ function ufclas_admin_info_page(){
 	}
 	?>
     
-    <div class="wrap">
+    <div class="wrap container-fluid">
 		<div id="icon-tools" class="icon32"></div>
 		<h2><?php _e( 'Site Information', 'ufclas-admin' ); ?></h2>
-
-    	<table id="info" class="display ufca-datatable" width="100%">
+        
+    	<table id="info" class="display dataTable ufca-datatable table table-striped table-bordered table-hover" width="100%">
         	<thead>
             	<tr>
                 	<th class="id">ID</th>

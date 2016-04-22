@@ -58,12 +58,12 @@ function ufclas_admin_siteusers_page(){
 		<div id="icon-tools" class="icon32"></div>
 		<h2><?php _e( 'Site User Information', 'ufclas-admin' ); ?></h2>
 
-    	<table id="siteusers" class="display ufca-datatable" width="100%">
+    	<table id="siteusers" class="display dataTable ufca-datatable table table-striped table-bordered table-hover" width="100%">
         	<thead>
             	<tr>
-                	<th class="userid">User ID</th>
-                    <th class="username">Username</th>
-                    <th class="firstname">First Name</th>
+                	<th class="userid">Public</th>
+                    <th class="username">Public, Not Indexed</th>
+                    <th class="firstname">Private, GatorLink </th>
                     <th class="lastname">Last Name</th>
                     <th class="roles">Roles</th>
                     <th class="sitepath">Site Path</th>

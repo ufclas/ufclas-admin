@@ -86,7 +86,7 @@ function ufclas_admin_siteforms_page(){
 		<div id="icon-tools" class="icon32"></div>
 		<h2><?php _e( 'Site Forms', 'ufclas-admin' ); ?></h2>
 
-    	<table id="info" class="display ufca-datatable" width="100%">
+    	<table id="info" class="display dataTable ufca-datatable table table-striped table-bordered table-hover" width="100%">
         	<thead>
             	<tr>
                 	<th class="sitepath">Site Path</th>

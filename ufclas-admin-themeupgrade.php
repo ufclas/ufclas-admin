@@ -40,7 +40,7 @@ function ufclas_admin_themeupgrade_table() {
             }
 			restore_current_blog();
         }
-		set_site_transient( 'ufclas_admin_themeupgrade', $data, 2 * HOUR_IN_SECONDS );
+		set_site_transient( 'ufclas_admin_themeupgrade', $data, 15 * 60 );
 	}
 	// Need to encode data to pass an array to JavaScript, 
 	// Must not be contain an associative array because Datatables doesn't support objects
@@ -63,8 +63,8 @@ function ufclas_admin_themeupgrade_page(){
     <div class="wrap">
 		<div id="icon-tools" class="icon32"></div>
 		<h2><?php _e( 'Theme Upgrade Information', 'ufclas-admin' ); ?></h2>
-		<p>Note: This information only updates every 2 hours.</p>
-    	<table id="themeupgrade" class="display ufca-datatable" width="100%">
+		<p>Note: This information only updates every 15 minutes.</p>
+    	<table id="themeupgrade" class="display dataTable ufca-datatable table table-striped table-bordered table-hover" width="100%">
         	<thead>
             	<tr>
                     <th class="id">ID</th>

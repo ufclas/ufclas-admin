@@ -1,40 +1,71 @@
-/* CSS Document */
-
-table.ufca-datatable {
+/* Override Bootstrap styles */
+body.wp-admin {
+	background-color: transparent;
+	font-family: "Open Sans", sans-serif;
+	font-size: 13px;
+}
+.wrap a {
+	font-weight: bold;	
+}
+.table-striped > tbody > tr:nth-of-type(2n+1) {
+    background-color: #d9edf7;
+}
+.table-hover>tbody>tr:hover {
+    background-color: #ffc;
+}
+.ufca-datatable {
 	display: none;
-	width: 100%;
 }
 table.ufca-datatable th {
-	text-align: left;	
+	background-color: #fff;
 }
-table#info td {
-	vertical-align: top;	
+table.ufca-datatable tr {
+	background-color: #fff;
 }
-table#info th.id {
-	max-width: 20px;	
+.dt-buttons {
+	float: right;	
 }
-table#info th.path {
-	max-width: 45px;	
+.dataTables_length {
+	display: inline-block;	
 }
-table#info th.plugins {
-	max-width: 250px;	
+.dataTables_wrapper {
+	margin: 30px 0;	
 }
-table#themeupgrade th.widgets,
-table#themeupgrade th.plugins {
-	width: 25% !important;	
+.dataTables_filter {
+	margin-top: 15px;	
 }
-table#info th.sitetitle {
-	width: 15% !important;	
+/* Animate icon */
+#loading .glyphicon-refresh {
+	display: none;
+	width: 100%;
+	padding: 60px;
+	text-align: center;
 }
-table#info th.formid {
-	max-width: 50px;	
+#loading .glyphicon-refresh-animate {
+	display: inline-block;
+	-animation: spin .7s infinite linear;
+    -ms-animation: spin .7s infinite linear;
+    -webkit-animation: spinw .7s infinite linear;
+    -moz-animation: spinm .7s infinite linear;
 }
-table#info th.formfields {
-	width: 40% !important;	
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
 }
-table#info th.formtitle {
-	width: 12% !important;	
+@-webkit-keyframes spinw {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
 }
-table#info th.formnotifications {
-	width: 20% !important;	
+@-moz-keyframes spinm {
+    from { -moz-transform: rotate(0deg);}
+    to { -moz-transform: rotate(360deg);}
+}
+
+/* Hide elements on main page */
+.toplevel_page_ufclas-admin-main .dt-buttons, 
+.toplevel_page_ufclas-admin-main .dataTables_filter, 
+.toplevel_page_ufclas-admin-main .dataTables_info, 
+.toplevel_page_ufclas-admin-main .dataTables_length, 
+.toplevel_page_ufclas-admin-main .dataTables_paginate {
+	display: none;	
 }
