@@ -3,7 +3,7 @@
 Plugin Name: UF CLAS - Admin Tools
 Plugin URI: http://it.clas.ufl.edu/
 Description: Management/Reporting Tools for UF CLAS.
-Version: 0.6.0
+Version: 0.6.1
 Author: Priscilla Chapman (CLAS IT)
 Author URI: http://it.clas.ufl.edu/
 License: GPL2
@@ -99,6 +99,7 @@ function ufclas_admin_main_page(){
                     <th>Private, GatorLink Users</th>
                     <th>Private, Network Admin Only</th>
                     <th>Private</th>
+                    <th>Archived</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -127,6 +128,7 @@ function ufclas_admin_main_table() {
 			'Private, GatorLink Users' => 0,
 			'Private, Network Admin Only' => 0,
 			'Private' => 0,
+			'Archived' => 0,
 		);
 		
 		foreach($sites as $site){	
