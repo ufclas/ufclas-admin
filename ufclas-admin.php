@@ -3,7 +3,7 @@
 Plugin Name: UF CLAS - Admin Tools
 Plugin URI: http://it.clas.ufl.edu/
 Description: Management/Reporting Tools for UF CLAS.
-Version: 0.6.1
+Version: 0.6.2
 Author: Priscilla Chapman (CLAS IT)
 Author URI: http://it.clas.ufl.edu/
 License: GPL2
@@ -52,12 +52,12 @@ function ufclas_admin_scripts( $hook ) {
 	);
 	if ( in_array( $hook, $pages) ) {
         // Plugin scripts and files
-		wp_enqueue_style( 'bootstrap', plugins_url( '/lib/bootstrap/css/bootstrap.min.css' , __FILE__ ), array(), '3.3.6', 'all');
-		wp_enqueue_script( 'bootstrap', plugins_url( '/lib/bootstrap/js/bootstrap.min.js' , __FILE__ ), array('jquery'), '3.3.6', true);
+		wp_enqueue_style( 'bootstrap', plugins_url( '/lib/bootstrap/css/bootstrap.min.css' , __FILE__ ), array(), NULL, 'all');
+		wp_enqueue_script( 'bootstrap', plugins_url( '/lib/bootstrap/js/bootstrap.min.js' , __FILE__ ), array('jquery'), NULL, true);
 		
 		// Datatables and extensions - see https://www.datatables.net/download/
-		wp_enqueue_style( 'datatables', plugins_url('/lib/jquery.datatables/dataTables.min.css', __FILE__ ), array('bootstrap'), '1.10.11', 'screen');
-    	wp_enqueue_script( 'datatables', plugins_url('/lib/jquery.datatables/dataTables.min.js', __FILE__ ), array('jquery','bootstrap'), '1.10.11', true);
+		wp_enqueue_style( 'datatables', plugins_url('/lib/jquery.datatables/dataTables.min.css', __FILE__ ), array('bootstrap'), NULL, 'screen');
+    	wp_enqueue_script( 'datatables', plugins_url('/lib/jquery.datatables/dataTables.min.js', __FILE__ ), array('jquery','bootstrap'), NULL, true);
 		
 		// Plugin scripts and files
 		wp_enqueue_style( 'ufclas-admin', plugins_url( '/css/ufclas-admin.css' , __FILE__ ), array('datatables'), NULL, 'screen');
@@ -73,6 +73,10 @@ function ufclas_admin_scripts( $hook ) {
 			'plugin_url' => plugins_url( '' , __FILE__ )
 		));
     }
+	if ($hook == 'toplevel_page_ufclas-admin-main'){
+		// D3.js chart library
+		wp_enqueue_script( 'd3', plugins_url('/lib/d3/d3.min.js', __FILE__ ), array('jquery',), NULL, true);
+	}
 }
 add_action( 'admin_enqueue_scripts', 'ufclas_admin_scripts' );
 
@@ -91,6 +95,9 @@ function ufclas_admin_main_page(){
 		<h2><?php _e( 'CLAS Admin Tools', 'ufclas-admin' ); ?></h2>
         
         <p><?php _e( 'Total Sites by Status', 'ufclas-admin' ); ?></p>
+        <div class="container">
+        	<div id="chart"></div>
+        </div>
         <table id="admin" class="display dataTable ufca-datatable table table-bordered table-hover" width="100%">
         	<thead>
             	<tr>
