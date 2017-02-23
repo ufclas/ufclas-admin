@@ -22,6 +22,7 @@ function ufclas_admin_siteusers_table() {
 			foreach($users as $user){
 				$user_data = get_userdata( $user->ID );
 				$user_roles = $user_data->roles;
+				$user_post_total = count_user_posts( $user->ID, array('post','page','article','kbe_knowledgebase','tribe_events') );
 				
 				$data[] = array(
 					$user_data->ID,
@@ -31,6 +32,7 @@ function ufclas_admin_siteusers_table() {
 					implode( ", ", $user_data->roles),
 					$site['path'],
 					$site['title'],
+					$user_post_total,
 				);
 			}
 			
@@ -68,6 +70,7 @@ function ufclas_admin_siteusers_page(){
                     <th class="roles">Roles</th>
                     <th class="sitepath">Site Path</th>
                     <th class="sitetitle">Site Title</th>
+                    <th class="path">Posts</th>
                 </tr>
             </thead>
             <tbody></tbody>

@@ -1,12 +1,12 @@
 <?php
 /*
-Plugin Name: UF CLAS - Admin Tools
-Plugin URI: http://it.clas.ufl.edu/
+Plugin Name: UFCLAS Admin Tools
+Plugin URI: https://it.clas.ufl.edu/
 Description: Management/Reporting Tools for UF CLAS.
-Version: 0.6.2
+Version: 0.6.3
 Author: Priscilla Chapman (CLAS IT)
-Author URI: http://it.clas.ufl.edu/
-License: GPL2
+Author URI: https://it.clas.ufl.edu/
+Build Date: 20170223
 */
 
 // Include admin page functions
