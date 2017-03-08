@@ -12,9 +12,7 @@ function ufclas_admin_themeupgrade_table() {
 	$sites = ufclas_admin_get_sites();
     
 	// Get existing copy of transient data if exists 
-	// @todo option to clear transient
-	//delete_site_transient('ufclas_admin_themeupgrade');
-	if( false === ( $data = get_site_transient('ufclas_admin_themeupgrade') ) ){
+	if( WP_DEBUG || ( false === ($data = get_site_transient('ufclas_admin_themeupgrade')) ) ){
 				
 		foreach($sites as $site){	
 			switch_to_blog( $site['id'] );

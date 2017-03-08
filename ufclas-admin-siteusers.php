@@ -9,9 +9,7 @@ function ufclas_admin_siteusers_table() {
 	$sites = ufclas_admin_get_sites();
 	
 	// Get existing copy of transient data if exists 
-	// TODO: 
-	//delete_site_transient('ufclas_admin_siteusers');
-	if( false === ( $data = get_site_transient('ufclas_admin_siteusers') ) ){
+	if( WP_DEBUG || ( false === ($data = get_site_transient('ufclas_admin_siteusers')) ) ){
 			
 		foreach($sites as $site){	
 			switch_to_blog( $site['id'] );

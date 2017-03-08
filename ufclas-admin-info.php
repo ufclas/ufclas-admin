@@ -10,9 +10,7 @@ function ufclas_admin_site_info_table() {
 	$sites = ufclas_admin_get_sites();
 	
 	// Get existing copy of transient data if exists 
-	// TODO: 
-	//delete_site_transient('ufclas_admin_siteinfo');
-	if( false === ( $data = get_site_transient('ufclas_admin_siteinfo') ) ){
+	if( WP_DEBUG || ( false === ($data = get_site_transient('ufclas_admin_siteinfo')) ) ){
 		
 		foreach($sites as $site){	
 			switch_to_blog( $site['id'] );
@@ -49,7 +47,7 @@ function ufclas_admin_info_page(){
 		<div id="icon-tools" class="icon32"></div>
 		<h2><?php _e( 'Site Information', 'ufclas-admin' ); ?></h2>
         
-    	<table id="info" class="display dataTable ufca-datatable table table-striped table-bordered table-hover" width="100%">
+    	<table id="info" class="display dataTable ufca-datatable table table-bordered table-hover" width="100%">
         	<thead>
             	<tr>
                 	<th class="id">ID</th>
@@ -82,8 +80,7 @@ function ufclas_admin_get_sites(){
 	global $wpdb;
 	$data = array();
 	
-	//delete_site_transient('ufclas_admin_sites');
-	if( false === ( $data = get_site_transient('ufclas_admin_sites') ) ){
+	if( WP_DEBUG || ( false === ($data = get_site_transient('ufclas_admin_sites')) ) ){
 		$status_names = array(
 			'1' => 'Public',
 			'0' => 'Public, Not Indexed',
@@ -106,7 +103,7 @@ function ufclas_admin_get_sites(){
 			}
 			switch_to_blog( $id );
 			$status = ( empty($inactive_status) )? $status_names[$site['public']]:$inactive_status;
-			$title = sprintf( '<a href="%s" target="_blank">%s</a>', admin_url(), get_bloginfo('name') );
+			$title = sprintf( '<a href="%s" target="_blank" title="%s">%s</a>', admin_url(), __('Site Dashboard', 'ufclas-admin'),  get_bloginfo('name') );
 			$path = $site['path'];
 			$data[$id] = array(
 				'id' => $id, 

@@ -1,4 +1,5 @@
 jQuery(function($){
+
    	// Create data object
 	var data = {};
 	data['action'] = ufca_data.action;
@@ -15,13 +16,16 @@ jQuery(function($){
 	})
 	.done( function( response ){
 		
-		// Initialize DataTable, use array converted from JSON as data source
+		// Initialize DataTable, use array converted from JSON as data source	
+		var responseData = JSON.parse(response);
+		
 		$('.ufca-datatable').DataTable({ 
-			data: JSON.parse(response),
+			data: responseData,
 			dom: 'Blfrtip',
-    		buttons: ['copy', 'excel', 'pdf', 'print'],
+			buttons: ['copy', 'excel', 'pdf', 'print'],
 			lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]]
 		});
+		
 		
 		if (pagenow == 'toplevel_page_ufclas-admin-main-network'){
 			// Initialize Donut chart using D3.js
@@ -81,9 +85,11 @@ jQuery(function($){
 		}
 			  
 	});
+	
 	// Remove loading animation when table fully loaded
 	$('.ufca-datatable').on('init.dt', function(){
 		$('#loading span').removeClass('glyphicon-refresh-animate');
 		$(this).fadeIn();
 	});
+	
 });

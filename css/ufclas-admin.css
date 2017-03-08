@@ -69,3 +69,16 @@ table.ufca-datatable tr {
 .toplevel_page_ufclas-admin-main .dataTables_paginate {
 	display: none;	
 }
+td.details-control:before {
+	content: "\f502";
+	font-size: 20px;
+	font-family: dashicons;
+	color: #337ab7;
+	text-align: center;
+	display: block;
+	cursor: pointer;
+}
+tr.shown td.details-control:before {
+	content: "\f153";
+	color: #AA450A;
+}

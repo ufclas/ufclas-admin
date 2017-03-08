@@ -2,11 +2,11 @@
 /*
 Plugin Name: UFCLAS Admin Tools
 Plugin URI: https://it.clas.ufl.edu/
-Description: Management/Reporting Tools for UF CLAS.
-Version: 0.6.3
+Description: Management/Reporting Tools for UF CLAS Networks.
+Version: 0.7.0
 Author: Priscilla Chapman (CLAS IT)
 Author URI: https://it.clas.ufl.edu/
-Build Date: 20170223
+Build Date: 20170308
 */
 
 // Include admin page functions
@@ -55,9 +55,9 @@ function ufclas_admin_scripts( $hook ) {
 		wp_enqueue_style( 'bootstrap', plugins_url( '/lib/bootstrap/css/bootstrap.min.css' , __FILE__ ), array(), NULL, 'all');
 		wp_enqueue_script( 'bootstrap', plugins_url( '/lib/bootstrap/js/bootstrap.min.js' , __FILE__ ), array('jquery'), NULL, true);
 		
-		// Datatables and extensions - see https://www.datatables.net/download/
-		wp_enqueue_style( 'datatables', plugins_url('/lib/jquery.datatables/dataTables.min.css', __FILE__ ), array('bootstrap'), NULL, 'screen');
-    	wp_enqueue_script( 'datatables', plugins_url('/lib/jquery.datatables/dataTables.min.js', __FILE__ ), array('jquery','bootstrap'), NULL, true);
+		// Datatables and extensions -  https://datatables.net/download/#dt/jszip-2.5.0/pdfmake-0.1.18/dt-1.10.13/b-1.2.4/b-html5-1.2.4/b-print-1.2.4/r-2.1.1/se-1.2.0
+		wp_enqueue_style( 'datatables', '//cdn.datatables.net/v/dt/jszip-2.5.0/pdfmake-0.1.18/dt-1.10.13/b-1.2.4/b-html5-1.2.4/b-print-1.2.4/r-2.1.1/se-1.2.0/datatables.min.css', array('bootstrap'), NULL, 'screen');
+    	wp_enqueue_script( 'datatables', '//cdn.datatables.net/v/dt/jszip-2.5.0/pdfmake-0.1.18/dt-1.10.13/b-1.2.4/b-html5-1.2.4/b-print-1.2.4/r-2.1.1/se-1.2.0/datatables.min.js', array('jquery','bootstrap'), NULL, true);
 		
 		// Plugin scripts and files
 		wp_enqueue_style( 'ufclas-admin', plugins_url( '/css/ufclas-admin.css' , __FILE__ ), array('datatables'), NULL, 'screen');
@@ -66,6 +66,7 @@ function ufclas_admin_scripts( $hook ) {
 		// Set Javascript variables according to hook name
 		$page_keyword = explode('-', $hook);
 		$page_keyword = array_pop( $page_keyword );
+		
 		wp_localize_script('ufclas-admin', 'ufca_data', array(
 			'action' => "ufca_{$page_keyword}",
 			'nonce_name' => "{$page_keyword}_nonce",
@@ -75,7 +76,7 @@ function ufclas_admin_scripts( $hook ) {
     }
 	if ($hook == 'toplevel_page_ufclas-admin-main'){
 		// D3.js chart library
-		wp_enqueue_script( 'd3', plugins_url('/lib/d3/d3.min.js', __FILE__ ), array('jquery',), NULL, true);
+		wp_enqueue_script( 'd3', 'https://d3js.org/d3.v3.min.js', array('jquery',), NULL, true);
 	}
 }
 add_action( 'admin_enqueue_scripts', 'ufclas_admin_scripts' );
@@ -125,9 +126,7 @@ function ufclas_admin_main_table() {
 	$sites = ufclas_admin_get_sites();
 
 	// Get existing copy of transient data if exists 
-	// @todo option to clear transient
-	//delete_site_transient('ufclas_admin_siteforms');
-	if( false === ( $data = get_site_transient('ufclas_admin') ) ){ 
+	if( WP_DEBUG || ( false === ($data = get_site_transient('ufclas_admin')) ) ){
 		
 		$status_count = array(
 			'Public' => 0,
