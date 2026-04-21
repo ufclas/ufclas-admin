@@ -100,7 +100,7 @@ function ufclas_admin_siteforms_table() {
 			
 			restore_current_blog();
 		}
-		set_site_transient( 'ufclas_admin_siteforms', $data, 1 * MINUTE_IN_SECONDS );
+		set_site_transient( 'ufclas_admin_siteforms', $data, 12 * HOUR_IN_SECONDS );
 	}
 	/**
 	 * Encodes data array to pass to DataTables. DataTables does not support objects or associative arrays
