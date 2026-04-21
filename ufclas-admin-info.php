@@ -51,7 +51,7 @@ function ufclas_admin_info_page(){
         	<thead>
             	<tr>
                 	<th class="id">ID</th>
-                    <th class="path">Path</th>
+                    <th class="path">URL</th>
                     <th class="title">Title</th>
                     <th class="desc">Description</th>
                     <th class="status">Status</th>
