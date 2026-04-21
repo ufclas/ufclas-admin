@@ -143,7 +143,7 @@ function ufclas_admin_main_table() {
 		
 		$data[] = array_values( $status_count );
 		
-		set_site_transient( 'ufclas_admin', $data, 12 * HOUR_IN_SECONDS );
+		set_site_transient( 'ufclas_admin', $data, 1 * MINUTE_IN_SECONDS );
 	}
 	// Need to encode data to pass an array to JavaScript, 
 	// Must not be contain an associative array because Datatables doesn't support objects
