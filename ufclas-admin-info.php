@@ -10,7 +10,7 @@ function ufclas_admin_site_info_table() {
 	$sites = ufclas_admin_get_sites();
 	
 	// Get existing copy of transient data if exists 
-	if( WP_DEBUG || ( false === ($data = get_site_transient('ufclas_admin_siteinfo')) ) ){
+	if ( false === ( $data = get_site_transient( 'ufclas_admin_sites' ) ) ){
 		
 		foreach($sites as $site){	
 			switch_to_blog( $site['id'] );
@@ -51,7 +51,7 @@ function ufclas_admin_info_page(){
         	<thead>
             	<tr>
                 	<th class="id">ID</th>
-                    <th class="path">URL</th>
+                    <th class="path">Path</th>
                     <th class="title">Title</th>
                     <th class="desc">Description</th>
                     <th class="status">Status</th>
@@ -80,7 +80,7 @@ function ufclas_admin_get_sites(){
 	global $wpdb;
 	$data = array();
 	
-	if( WP_DEBUG || ( false === ($data = get_site_transient('ufclas_admin_sites')) ) ){
+	if ( false === ( $data = get_site_transient( 'ufclas_admin_sites' ) ) ){
 		$status_names = array(
 			'1' => 'Public',
 			'0' => 'Public, Not Indexed',
