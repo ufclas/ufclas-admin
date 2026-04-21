@@ -27,7 +27,7 @@ function ufclas_admin_site_info_table() {
 			);
 			restore_current_blog();
 		}
-		set_site_transient( 'ufclas_admin_siteinfo', $data, 5 * MINUTE_IN_SECONDS );
+		set_site_transient( 'ufclas_admin_siteinfo', $data, 1 * MINUTE_IN_SECONDS );
 	}
 	// Need to encode data to pass an array to JavaScript, 
 	// Must not be contain an associative array because Datatables doesn't support objects
@@ -51,7 +51,7 @@ function ufclas_admin_info_page(){
         	<thead>
             	<tr>
                 	<th class="id">ID</th>
-                    <th class="path">Path</th>
+                    <th class="path">URL</th>
                     <th class="title">Title</th>
                     <th class="desc">Description</th>
                     <th class="status">Status</th>
@@ -116,7 +116,7 @@ function ufclas_admin_get_sites(){
 			restore_current_blog();
 		}
 		
-		set_site_transient( 'ufclas_admin_sites', $data, 5 * MINUTE_IN_SECONDS );
+		set_site_transient( 'ufclas_admin_sites', $data, 1 * MINUTE_IN_SECONDS );
 	}
 	return $data;
 }

@@ -36,7 +36,7 @@ function ufclas_admin_siteusers_table() {
 			
 			restore_current_blog();
 		}
-		set_site_transient( 'ufclas_admin_siteusers', $data, 12 * HOUR_IN_SECONDS );
+		set_site_transient( 'ufclas_admin_siteusers', $data, 1 * MINUTE_IN_SECONDS );
 	}
 
 	// Need to encode data to pass an array to JavaScript, 
