@@ -10,7 +10,7 @@ function ufclas_admin_site_info_table() {
 	$sites = ufclas_admin_get_sites();
 	
 	// Get existing copy of transient data if exists 
-	if ( false === ( $data = get_site_transient( 'ufclas_admin_sites' ) ) ){
+	if( WP_DEBUG || ( false === ($data = get_site_transient('ufclas_admin_siteinfo')) ) ){
 		
 		foreach($sites as $site){	
 			switch_to_blog( $site['id'] );
@@ -27,7 +27,7 @@ function ufclas_admin_site_info_table() {
 			);
 			restore_current_blog();
 		}
-		set_site_transient( 'ufclas_admin_siteinfo', $data, 1 * MINUTE_IN_SECONDS );
+		set_site_transient( 'ufclas_admin_siteinfo', $data, 12 * HOUR_IN_SECONDS );
 	}
 	// Need to encode data to pass an array to JavaScript, 
 	// Must not be contain an associative array because Datatables doesn't support objects
@@ -80,7 +80,7 @@ function ufclas_admin_get_sites(){
 	global $wpdb;
 	$data = array();
 	
-	if ( false === ( $data = get_site_transient( 'ufclas_admin_sites' ) ) ){
+	if( WP_DEBUG || ( false === ($data = get_site_transient('ufclas_admin_sites')) ) ){
 		$status_names = array(
 			'1' => 'Public',
 			'0' => 'Public, Not Indexed',
@@ -104,7 +104,7 @@ function ufclas_admin_get_sites(){
 			switch_to_blog( $id );
 			$status = ( empty($inactive_status) )? $status_names[$site['public']]:$inactive_status;
 			$title = sprintf( '<a href="%s" target="_blank" title="%s">%s</a>', admin_url(), __('Site Dashboard', 'ufclas-admin'),  get_bloginfo('name') );
-			$site_url = get_home_url( $id );
+			$site_url = get_site_url( $id );
 
 			$data[$id] = array(
 				'id' => $id,
@@ -116,7 +116,7 @@ function ufclas_admin_get_sites(){
 			restore_current_blog();
 		}
 		
-		set_site_transient( 'ufclas_admin_sites', $data, 1 * MINUTE_IN_SECONDS );
+		set_site_transient( 'ufclas_admin_sites', $data, 12 * HOUR_IN_SECONDS );
 	}
 	return $data;
 }
