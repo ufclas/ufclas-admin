@@ -104,11 +104,11 @@ function ufclas_admin_get_sites(){
 			switch_to_blog( $id );
 			$status = ( empty($inactive_status) )? $status_names[$site['public']]:$inactive_status;
 			$title = sprintf( '<a href="%s" target="_blank" title="%s">%s</a>', admin_url(), __('Site Dashboard', 'ufclas-admin'),  get_bloginfo('name') );
-			$site_url = get_site_url( $id );
+			$path = $site['path'];
 
 			$data[$id] = array(
 				'id' => $id,
-				'path' => $site_url,
+				'path' => $path,
 				'title' => $title,
 				'description' => get_bloginfo('description'),
 				'status' => $status
