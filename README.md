@@ -51,6 +51,9 @@ Installation
 Changelog
 ---------
 
+### 0.8
+- Adds Registered (column F) and Last Updated (column G) to the Site Info table — for site lifecycle planning. Excel/CSV exports include the new columns.
+
 ### 0.7
 - Updates forms table to include field types and links to form preview
 - Removes unused site archive file

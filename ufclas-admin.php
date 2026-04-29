@@ -3,7 +3,7 @@
 Plugin Name: UFCLAS Admin Tools
 Plugin URI: https://it.clas.ufl.edu/
 Description: Management/Reporting Tools for UF CLAS Networks.
-Version: 0.7.0
+Version: 0.8.0
 Author: Priscilla Chapman (CLAS IT)
 Author URI: https://it.clas.ufl.edu/
 Build Date: 20170308

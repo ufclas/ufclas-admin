@@ -22,6 +22,8 @@ function ufclas_admin_site_info_table() {
 				$site['title'],
 				$site['description'],
 				$site['status'],
+				$site['registered'],
+				$site['last_updated'],
 				$theme,
 				$plugins
 			);
@@ -55,6 +57,8 @@ function ufclas_admin_info_page(){
                     <th class="title">Title</th>
                     <th class="desc">Description</th>
                     <th class="status">Status</th>
+                    <th class="registered">Registered</th>
+                    <th class="last-updated">Last Updated</th>
                     <th class="theme">Theme</th>
                     <th class="plugins">Plugins</th>
                 </tr>
@@ -111,7 +115,9 @@ function ufclas_admin_get_sites(){
 				'path' => $site_url,
 				'title' => $title,
 				'description' => get_bloginfo('description'),
-				'status' => $status
+				'status' => $status,
+				'registered' => mysql2date('Y-m-d', $site['registered']),
+				'last_updated' => mysql2date('Y-m-d', $site['last_updated'])
 			);
 			restore_current_blog();
 		}
