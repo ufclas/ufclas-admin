@@ -3,7 +3,7 @@
 Plugin Name: UFCLAS Admin Tools
 Plugin URI: https://it.clas.ufl.edu/
 Description: Management/Reporting Tools for UF CLAS Networks.
-Version: 0.8.0
+Version: 0.8.1
 Author: Priscilla Chapman (CLAS IT)
 Author URI: https://it.clas.ufl.edu/
 Build Date: 20170308
@@ -70,8 +70,9 @@ function ufclas_admin_scripts( $hook ) {
 		wp_localize_script('ufclas-admin', 'ufca_data', array(
 			'action' => "ufca_{$page_keyword}",
 			'nonce_name' => "{$page_keyword}_nonce",
-			'nonce_value' => wp_create_nonce( "ufca-get-{$page_keyword}"), 
-			'plugin_url' => plugins_url( '' , __FILE__ )
+			'nonce_value' => wp_create_nonce( "ufca-get-{$page_keyword}"),
+			'plugin_url' => plugins_url( '' , __FILE__ ),
+			'refresh_nonce' => wp_create_nonce( 'ufca-refresh' )
 		));
     }
 	if ($hook == 'toplevel_page_ufclas-admin-main'){
@@ -153,4 +154,24 @@ function ufclas_admin_main_table() {
 }
 add_action( 'wp_ajax_ufca_main', 'ufclas_admin_main_table' );
 
-
+/**
+ * Clear all cached site data so the next AJAX call rebuilds from source.
+ * @since 0.8.1
+ */
+function ufclas_admin_refresh_data() {
+	check_ajax_referer( 'ufca-refresh', 'refresh_nonce' );
+	$keys = array(
+		'ufclas_admin',
+		'ufclas_admin_siteinfo',
+		'ufclas_admin_sites',
+		'ufclas_admin_siteforms',
+		'ufclas_admin_siteusers',
+		'ufclas_admin_themeupgrade',
+	);
+	foreach ( $keys as $key ) {
+		delete_site_transient( $key );
+	}
+	echo json_encode( array( 'success' => true ) );
+	wp_die();
+}
+add_action( 'wp_ajax_ufca_refresh', 'ufclas_admin_refresh_data' );

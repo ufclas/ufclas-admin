@@ -52,7 +52,8 @@ Changelog
 ---------
 
 ### 0.8
-- Adds Registered (column F) and Last Updated (column G) to the Site Info table — for site lifecycle planning. Excel/CSV exports include the new columns.
+- [0.8.1] Adds a "Refresh Data" button on every CLAS Admin page — clears the cached transients on the server, then reloads to rebuild from source. No more WP-CLI required for routine refreshes.
+- [0.8.0] Adds Registered (column F) and Last Updated (column G) to the Site Info table — for site lifecycle planning. Excel/CSV exports include the new columns.
 
 ### 0.7
 - Updates forms table to include field types and links to form preview

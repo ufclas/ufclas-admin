@@ -4,7 +4,25 @@ jQuery(function($){
 	var data = {};
 	data['action'] = ufca_data.action;
 	data[ufca_data.nonce_name] = ufca_data.nonce_value;
-	
+
+	// Refresh button — clears server transients then reloads to rebuild from source
+	var $refreshBtn = $('<button type="button" class="btn btn-primary" id="ufca-refresh-btn" style="margin-bottom:10px;"><span class="glyphicon glyphicon-refresh"></span> Refresh Data</button>');
+	$('.ufca-datatable').before( $refreshBtn );
+
+	$refreshBtn.on('click', function(){
+		var $btn = $(this);
+		$btn.prop('disabled', true).html('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Refreshing…');
+		$.post( ajaxurl, {
+			action: 'ufca_refresh',
+			refresh_nonce: ufca_data.refresh_nonce
+		}).done(function(){
+			location.reload();
+		}).fail(function(){
+			$btn.prop('disabled', false).html('<span class="glyphicon glyphicon-refresh"></span> Refresh Data');
+			alert('Refresh failed. Try the WP-CLI commands in the README.');
+		});
+	});
+
 	// Add a loading animation to the table
 	$('.ufca-datatable').before( '<div id="loading"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span></div>' );
 	
