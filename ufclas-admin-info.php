@@ -9,10 +9,12 @@ function ufclas_admin_site_info_table() {
 	$data = array();
 	$sites = ufclas_admin_get_sites();
 	
-	// Get existing copy of transient data if exists 
+	// Get existing copy of transient data if exists
 	if( WP_DEBUG || ( false === ($data = get_site_transient('ufclas_admin_siteinfo')) ) ){
-		
-		foreach($sites as $site){	
+
+		$sites = ufclas_admin_classify_sites( $sites );
+
+		foreach($sites as $site){
 			switch_to_blog( $site['id'] );
 			$theme = get_option('stylesheet');
 			$plugins = ufclas_admin_list_plugins( get_option('active_plugins', array()) );
@@ -25,7 +27,10 @@ function ufclas_admin_site_info_table() {
 				$site['registered'],
 				$site['last_updated'],
 				$theme,
-				$plugins
+				$plugins,
+				$site['unit_group_type'],
+				$site['unit_group_title'],
+				$site['unit_group_id']
 			);
 			restore_current_blog();
 		}
@@ -61,6 +66,9 @@ function ufclas_admin_info_page(){
                     <th class="last-updated">Last Updated</th>
                     <th class="theme">Theme</th>
                     <th class="plugins">Plugins</th>
+                    <th class="unit-group-type">Unit Group Type</th>
+                    <th class="unit-group-title">Unit Group Title</th>
+                    <th class="unit-group-id">Unit Group ID</th>
                 </tr>
             </thead>
             <tbody></tbody>
