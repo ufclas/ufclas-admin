@@ -8,10 +8,12 @@ function ufclas_admin_siteusers_table() {
 	$data = array();
 	$sites = ufclas_admin_get_sites();
 	
-	// Get existing copy of transient data if exists 
+	// Get existing copy of transient data if exists
 	if( WP_DEBUG || ( false === ($data = get_site_transient('ufclas_admin_siteusers')) ) ){
-			
-		foreach($sites as $site){	
+
+		$sites = ufclas_admin_classify_sites( $sites );
+
+		foreach($sites as $site){
 			switch_to_blog( $site['id'] );
 			$user_query = new WP_User_Query( array( 'blog_id' => $site['id'], 'fields' => array('ID') ) );
 			$users = $user_query->get_results();
@@ -21,7 +23,12 @@ function ufclas_admin_siteusers_table() {
 				$user_data = get_userdata( $user->ID );
 				$user_roles = $user_data->roles;
 				$user_post_total = count_user_posts( $user->ID, array('post','page','article','kbe_knowledgebase','tribe_events') );
-				
+
+				// Build full @ufl.edu form. user_login at UFL is the gatorlink, sometimes
+				// already including the suffix, sometimes not.
+				$login = $user_data->user_login;
+				$email = ( strpos( $login, '@' ) !== false ) ? $login : $login . '@ufl.edu';
+
 				$data[] = array(
 					$user_data->ID,
 					str_replace( '@ufl.edu', '', $user_data->user_login ),
@@ -31,9 +38,13 @@ function ufclas_admin_siteusers_table() {
 					$site['path'],
 					$site['title'],
 					$user_post_total,
+					$email,
+					$site['unit_group_type'],
+					$site['unit_group_title'],
+					$site['unit_group_id'],
 				);
 			}
-			
+
 			restore_current_blog();
 		}
 		set_site_transient( 'ufclas_admin_siteusers', $data, 12 * HOUR_IN_SECONDS );
@@ -69,6 +80,10 @@ function ufclas_admin_siteusers_page(){
                     <th class="sitepath">Site Path</th>
                     <th class="sitetitle">Site Title</th>
                     <th class="path">Posts</th>
+                    <th class="email">Email</th>
+                    <th class="unit-group-type">Unit Group Type</th>
+                    <th class="unit-group-title">Unit Group Title</th>
+                    <th class="unit-group-id">Unit Group ID</th>
                 </tr>
             </thead>
             <tbody></tbody>
