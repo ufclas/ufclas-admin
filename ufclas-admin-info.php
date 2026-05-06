@@ -9,10 +9,12 @@ function ufclas_admin_site_info_table() {
 	$data = array();
 	$sites = ufclas_admin_get_sites();
 	
-	// Get existing copy of transient data if exists 
+	// Get existing copy of transient data if exists
 	if( WP_DEBUG || ( false === ($data = get_site_transient('ufclas_admin_siteinfo')) ) ){
-		
-		foreach($sites as $site){	
+
+		$sites = ufclas_admin_classify_sites( $sites );
+
+		foreach($sites as $site){
 			switch_to_blog( $site['id'] );
 			$theme = get_option('stylesheet');
 			$plugins = ufclas_admin_list_plugins( get_option('active_plugins', array()) );
@@ -25,7 +27,10 @@ function ufclas_admin_site_info_table() {
 				$site['registered'],
 				$site['last_updated'],
 				$theme,
-				$plugins
+				$plugins,
+				$site['unit_group_type'],
+				$site['unit_group_title'],
+				$site['unit_group_id']
 			);
 			restore_current_blog();
 		}
@@ -61,6 +66,9 @@ function ufclas_admin_info_page(){
                     <th class="last-updated">Last Updated</th>
                     <th class="theme">Theme</th>
                     <th class="plugins">Plugins</th>
+                    <th class="unit-group-type">Unit Group Type</th>
+                    <th class="unit-group-title">Unit Group Title</th>
+                    <th class="unit-group-id">Unit Group ID</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -117,7 +125,8 @@ function ufclas_admin_get_sites(){
 				'description' => get_bloginfo('description'),
 				'status' => $status,
 				'registered' => mysql2date('Y-m-d', $site['registered']),
-				'last_updated' => mysql2date('Y-m-d', $site['last_updated'])
+				'last_updated' => mysql2date('Y-m-d', $site['last_updated']),
+				'theme' => get_option('stylesheet')
 			);
 			restore_current_blog();
 		}
@@ -125,4 +134,123 @@ function ufclas_admin_get_sites(){
 		set_site_transient( 'ufclas_admin_sites', $data, 12 * HOUR_IN_SECONDS );
 	}
 	return $data;
+}
+
+/**
+ * Classify each site into a Unit Group per the SharePoint Website Management
+ * Database doc rules. Returns the input array with three new keys per site:
+ *   - unit_group_type  (Mercury|Staged|Migrated|Unmigrated|Archived|Unclassified)
+ *   - unit_group_title (canonical group title)
+ *   - unit_group_id    ('g-<canonical blog_id>')
+ *
+ * @since 0.9.0
+ * @param array $sites  Output of ufclas_admin_get_sites(), keyed by blog_id.
+ * @return array Same array with classification fields added.
+ */
+function ufclas_admin_classify_sites( $sites ) {
+	// Pre-process: extract clean comparable fields per site.
+	$processed = array();
+	foreach ( $sites as $id => $site ) {
+		$processed[ $id ] = array(
+			'clean_title' => strip_tags( $site['title'] ),
+			'clean_url'   => rtrim( strtolower( $site['path'] ), '/' ),
+			'status'      => $site['status'],
+			'theme'       => isset( $site['theme'] ) ? strtolower( $site['theme'] ) : '',
+		);
+	}
+
+	// Pass 1: identify Migrated pairs (one title with " OLD", a partner with the base).
+	$migrated_pairs = array();
+	foreach ( $processed as $id => $p ) {
+		if ( substr( $p['clean_title'], -4 ) === ' OLD' ) {
+			$base = substr( $p['clean_title'], 0, -4 );
+			foreach ( $processed as $partner_id => $partner ) {
+				if ( $partner_id !== $id && $partner['clean_title'] === $base ) {
+					$migrated_pairs[ $base ] = array(
+						'old_id'     => $id,
+						'current_id' => $partner_id,
+					);
+					break;
+				}
+			}
+		}
+	}
+
+	// Pass 2: count exact title occurrences.
+	$title_counts = array();
+	foreach ( $processed as $p ) {
+		$t = $p['clean_title'];
+		$title_counts[ $t ] = isset( $title_counts[ $t ] ) ? $title_counts[ $t ] + 1 : 1;
+	}
+
+	// Pass 3: classify each site (rules are mutually exclusive, first match wins).
+	foreach ( $sites as $id => &$site ) {
+		$p     = $processed[ $id ];
+		$title = $p['clean_title'];
+		$url   = $p['clean_url'];
+
+		$type         = 'Unclassified';
+		$group_title  = $title;
+		$canonical_id = $id;
+
+		// Rule 1a: this site IS the OLD half of a Migrated pair.
+		if ( substr( $title, -4 ) === ' OLD' ) {
+			$base = substr( $title, 0, -4 );
+			if ( isset( $migrated_pairs[ $base ] ) ) {
+				$type         = 'Migrated';
+				$group_title  = $base;
+				$canonical_id = $migrated_pairs[ $base ]['current_id'];
+			}
+		}
+		// Rule 1b: this site IS the current half of a Migrated pair.
+		elseif ( isset( $migrated_pairs[ $title ] ) ) {
+			$type         = 'Migrated';
+			$group_title  = $title;
+			$canonical_id = $migrated_pairs[ $title ]['current_id']; // = $id
+		}
+		// Rule 2: Unmigrated — title appears exactly twice with .ufl.edu+UF-CLAS-DEPT and -mercury split.
+		elseif ( isset( $title_counts[ $title ] ) && $title_counts[ $title ] === 2 ) {
+			$partner_id = null;
+			$partner    = null;
+			foreach ( $processed as $other_id => $other ) {
+				if ( $other_id !== $id && $other['clean_title'] === $title ) {
+					$partner_id = $other_id;
+					$partner    = $other;
+					break;
+				}
+			}
+			if ( $partner ) {
+				$self_is_real      = ( substr( $url, -8 ) === '.ufl.edu' ) && ( $p['theme'] === 'uf-clas-dept' );
+				$self_is_staged    = ( substr( $url, -8 ) === '-mercury' );
+				$partner_is_real   = ( substr( $partner['clean_url'], -8 ) === '.ufl.edu' ) && ( $partner['theme'] === 'uf-clas-dept' );
+				$partner_is_staged = ( substr( $partner['clean_url'], -8 ) === '-mercury' );
+
+				if ( ( $self_is_real && $partner_is_staged ) || ( $self_is_staged && $partner_is_real ) ) {
+					$type         = 'Unmigrated';
+					$group_title  = $title;
+					$canonical_id = $self_is_real ? $id : $partner_id;
+				}
+			}
+		}
+		// Rule 3: Archived — title appears once, status is Archived.
+		elseif ( isset( $title_counts[ $title ] ) && $title_counts[ $title ] === 1 && $p['status'] === 'Archived' ) {
+			$type = 'Archived';
+		}
+		// Rule 4: Mercury — title appears once, not archived, URL ends '.ufl.edu'.
+		elseif ( isset( $title_counts[ $title ] ) && $title_counts[ $title ] === 1 && substr( $url, -8 ) === '.ufl.edu' ) {
+			$type = 'Mercury';
+		}
+		// Rule 5: Staged — title appears once, not archived, URL ends '-mercury'.
+		elseif ( isset( $title_counts[ $title ] ) && $title_counts[ $title ] === 1 && substr( $url, -8 ) === '-mercury' ) {
+			$type = 'Staged';
+		}
+		// Else: stays Unclassified.
+
+		$site['unit_group_type']  = $type;
+		$site['unit_group_title'] = $group_title;
+		$site['unit_group_id']    = 'g-' . $canonical_id;
+	}
+	unset( $site ); // break the foreach-by-ref reference.
+
+	return $sites;
 }

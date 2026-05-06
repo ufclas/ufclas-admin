@@ -51,6 +51,10 @@ Installation
 Changelog
 ---------
 
+### 0.9
+- Adds Unit Group classification to the Site Info table — three new rightmost columns (Unit Group Type, Unit Group Title, Unit Group ID) for the SharePoint Website Management Database pipeline. Sites that don't fit the classification rules surface as "Unclassified" so edge cases get flagged early.
+- Enriches the Site Users table with Email (full @ufl.edu form), Unit Group Type, Unit Group Title, and Unit Group ID columns — lets the SharePoint side join Microsoft Forms acknowledgement responses to Unit Groups by email.
+
 ### 0.8
 - [0.8.1] Adds a "Refresh Data" button on every CLAS Admin page — clears the cached transients on the server, then reloads to rebuild from source. No more WP-CLI required for routine refreshes.
 - [0.8.0] Adds Registered (column F) and Last Updated (column G) to the Site Info table — for site lifecycle planning. Excel/CSV exports include the new columns.
