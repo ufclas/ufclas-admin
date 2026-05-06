@@ -117,7 +117,8 @@ function ufclas_admin_get_sites(){
 				'description' => get_bloginfo('description'),
 				'status' => $status,
 				'registered' => mysql2date('Y-m-d', $site['registered']),
-				'last_updated' => mysql2date('Y-m-d', $site['last_updated'])
+				'last_updated' => mysql2date('Y-m-d', $site['last_updated']),
+				'theme' => get_option('stylesheet')
 			);
 			restore_current_blog();
 		}
