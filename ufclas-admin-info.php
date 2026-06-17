@@ -137,11 +137,35 @@ function ufclas_admin_get_sites(){
 }
 
 /**
+ * Build a Unit Group key that is stable across a site's lifecycle.
+ *
+ * Keyed on the canonical group title (already strip_tags-cleaned), so the same
+ * unit maps to the same group through pre-Mercury, staging, and go-live. Falls
+ * back to the blog id when the title sanitizes to empty, and caps the slug so
+ * 'g-' . $slug fits the unit_group_id VARCHAR(64) column.
+ *
+ * @since 0.9.1
+ * @param string $group_title  Canonical group title.
+ * @param int    $fallback_id  Blog id to use when the title is empty.
+ * @return string  e.g. 'g-american-indian-and-indigenous-studies'.
+ */
+function ufclas_admin_unit_group_key( $group_title, $fallback_id ) {
+	$slug = sanitize_title( $group_title );
+	if ( strlen( $slug ) > 62 ) {
+		$slug = substr( $slug, 0, 62 );
+	}
+	if ( $slug === '' ) {
+		$slug = (string) $fallback_id;
+	}
+	return 'g-' . $slug;
+}
+
+/**
  * Classify each site into a Unit Group per the SharePoint Website Management
  * Database doc rules. Returns the input array with three new keys per site:
  *   - unit_group_type  (Mercury|Staged|Migrated|Unmigrated|Archived|Unclassified)
  *   - unit_group_title (canonical group title)
- *   - unit_group_id    ('g-<canonical blog_id>')
+ *   - unit_group_id    ('g-<title-slug>', stable across go-live; 'g-<blog_id>' only if title empty)
  *
  * @since 0.9.0
  * @param array $sites  Output of ufclas_admin_get_sites(), keyed by blog_id.
@@ -248,7 +272,7 @@ function ufclas_admin_classify_sites( $sites ) {
 
 		$site['unit_group_type']  = $type;
 		$site['unit_group_title'] = $group_title;
-		$site['unit_group_id']    = 'g-' . $canonical_id;
+		$site['unit_group_id']    = ufclas_admin_unit_group_key( $group_title, $canonical_id );
 	}
 	unset( $site ); // break the foreach-by-ref reference.
 
